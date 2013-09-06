@@ -21,29 +21,13 @@ var Class = (function(){
     if(typeof name == "object"){
       this.defChain(name)
     } else {
-      if(this.prototype[name]){
-        this.prototype[name] = defWithSuperFunction(name, cb)
-      } else {
-        this.prototype[name] = cb
-      }
+      this.prototype[name] = cb
     }
   }
 
   Class.defChain = function(methods){
     for(var name in methods){
-      if(this.prototype[name]){
-        this.prototype[name] = defWithSuperFunction(name, methods[name])
-      } else {
-        this.prototype[name] = methods[name]
-      }
-    }
-  }
-
-  var defWithSuperFunction = function(name, cb){
-    return function(){
-      var args = [].slice.call(arguments, 0)
-      args.unshift(this.super[name].bind(this))
-      return cb.apply(this, args)
+      this.prototype[name] = methods[name]
     }
   }
 
@@ -55,7 +39,12 @@ var Class = (function(){
     superConstructor: function(){
       if(!this.super)
         return
-      this.super.constructor.apply(this, arguments)
+      var constructor = this.super.constructor
+      F.prototype = this.super
+      var instance = new F
+      constructor.apply(instance, arguments)
+      this.super = instance
+      constructor.apply(this, arguments)
     },
 
     send: function(){
