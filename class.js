@@ -39,18 +39,13 @@ var Class = (function(){
     superConstructor: function(){
       if(!this.super)
         return
-      var constructor = this.super.constructor
-      F.prototype = this.super
-      var instance = new F
-      constructor.apply(instance, arguments)
-      this.super = instance
-      constructor.apply(this, arguments)
+      this.super.constructor.apply(this, arguments)
     },
 
     send: function(){
       var name = arguments[0]
       var args = [].slice.call(arguments, 1, arguments.length)
-      var fn = this[name] ? this[name] : this.methodMissing
+      var fn = (this[name] && typeof this[name] == 'function') ? this[name] : this.methodMissing
       return fn.apply(this, args)
     },
 
