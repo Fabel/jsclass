@@ -24,14 +24,14 @@ var elephant = new Elephant(100)
 
 console.log(elephant.print())   //-> 'Elephant'
 
-Elephant.def('print', function($super){
-  return $super() + " " +this.size + "kg"
+Elephant.def('print', function(){
+  return this.super.print.call(this) + " " +this.size + "kg"
 })
 
 console.log(elephant.print())  //-> 'Elephant 100kg'
 ```
 
-licence
+license
 =======
 
 The MIT License (MIT)
