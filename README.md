@@ -1,0 +1,4 @@
+jsclass
+=======
+
+js class implementation
