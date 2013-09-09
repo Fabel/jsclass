@@ -14,9 +14,9 @@ var Class = (function(){
     if(parent){
       F.prototype = parent.prototype
       constructor.prototype = new F
-      constructor.prototype.super = parent.prototype
-      constructor.prototype.constructor = constructor
+      constructor.prototype._super_ = parent.prototype
     }
+    constructor.prototype.constructor = constructor
     return constructor
   }
 
@@ -40,11 +40,16 @@ var Class = (function(){
 
   Class.prototype = {
     superConstructor: function(){
-      if(!this.super)
+      if(!this._super_)
         return
-      F.prototype = this.super
+
+      F.prototype = this._super_
       var tmp = new F
-      this.super.constructor.apply(tmp, arguments)
+      this._super_.constructor.apply(tmp, arguments)
+      for(var name in F.prototype){
+        if(['superConstructor'].indexOf(name) == -1)
+          F.prototype[name] = F.prototype[name].bind(tmp)
+      }
       this.super = tmp
     },
 
@@ -63,3 +68,4 @@ var Class = (function(){
 
   return Class
 })()
+
