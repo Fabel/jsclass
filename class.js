@@ -14,7 +14,8 @@ var Class = (function(){
     if(parent){
       F.prototype = parent.prototype
       constructor.prototype = new F
-      constructor.prototype._super_ = parent.prototype
+      constructor.prototype._super_ = constructor.prototype.super = parent.prototype
+
     }
     constructor.prototype.constructor = constructor
     return constructor
