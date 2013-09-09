@@ -7,12 +7,15 @@ var Class = (function(){
   var F = new Function
 
   var Class = function(constructor, parent){
+    constructor = constructor || Class.prototype.superConstructor
+
     extend(constructor, Class)
     extend(constructor.prototype, Class.prototype)
     if(parent){
       F.prototype = parent.prototype
       constructor.prototype = new F
       constructor.prototype.super = parent.prototype
+      constructor.prototype.constructor = constructor
     }
     return constructor
   }
@@ -39,7 +42,10 @@ var Class = (function(){
     superConstructor: function(){
       if(!this.super)
         return
-      this.super.constructor.apply(this, arguments)
+      F.prototype = this.super
+      var tmp = new F
+      this.super.constructor.apply(tmp, arguments)
+      this.super = tmp
     },
 
     send: function(){
