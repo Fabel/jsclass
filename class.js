@@ -48,7 +48,7 @@ var Class = (function(){
       var tmp = new F
       this._super_.constructor.apply(tmp, arguments)
       for(var name in F.prototype){
-        if(['superConstructor'].indexOf(name) == -1)
+        if(['superConstructor', 'send', '_super_'].indexOf(name) == -1)
           F.prototype[name] = F.prototype[name].bind(tmp)
       }
       this.super = tmp
