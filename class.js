@@ -48,7 +48,7 @@ var Class = (function(){
       var tmp = new F
       this._super_.constructor.apply(tmp, arguments)
       for(var name in F.prototype){
-        if(['superConstructor', 'send', '_super_'].indexOf(name) == -1)
+        if(['superConstructor', 'send', 'methodMissing', '_super_'].indexOf(name) == -1)
           F.prototype[name] = F.prototype[name].bind(tmp)
       }
       this.super = tmp
@@ -57,12 +57,14 @@ var Class = (function(){
     send: function(){
       var name = arguments[0]
       var args = [].slice.call(arguments, 1, arguments.length)
-      var fn = (this[name] && typeof this[name] == 'function') ? this[name] : this.methodMissing
-      return fn.apply(this, args)
+      if(this[name] && typeof this[name] == 'function')
+        return this[name].apply(this, args)
+      else
+        return this.methodMissing.call(this, name, args)
     },
 
-    methodMissing: function(){
-      console.log("Method missing.", arguments)
+    methodMissing: function(name, args){
+      console.log("Method "+name+" is undefined missing.", args)
     }
 
   }
