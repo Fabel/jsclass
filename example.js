@@ -1,56 +1,37 @@
-var A = new Class(function(x){
-  this.arg = 'a' + (x || "")
-})
+  var A = new Class(function(x){
+    this.x = x
+    this.className = 'A'
+  })
 
-var B = new Class(function(){
-  this.ar = 'b'
-  this.superConstructor()
-}, A)
+  A.def(function(){
+    //private func
+    var hello = function(){
+      return 'hello'
+    }
 
+    this.hi = function(arr){
+      return hello() + '!!!'+this.className
+    }
+  })
 
-var C = new Class(function(){
-  this.arg = 'c'
-  this.superConstructor()
-}, B)
+  var B = new Class(function(x, y){
+    this.$super(x)
+    this.y = y
+    this.className = 'B'
+  }).extend(A)
 
-A.def({
-  hi: function(arr){ arr.push(this.arg); return arr }
-})
+  var C = new Class(function(){
+    this.$super(10, 20)
+    this.z = 'c'
+    this.className = 'C'
+  }).extend(B)
 
-B.def({
-  // hi: function(arr){
-  //   this.super.hi(arr).push(this.ar)
-  //   return arr
-  // }
-})
+  var a = new A
+  console.log(a.hi())
 
-C.def({
-  hi: function(arr){
-    this.super.hi(arr).push(this.arg)
-    return arr
-  }
-})
+  var b = new B
+  console.log(b.hi())
 
-var a = new A
-console.log(a.hi(new Array))
+  var c = new C
+  console.log(c.hi())
 
-var b = new B
-console.log(b.hi(new Array))
-
-var c = new C
-console.log(c.hi(new Array))
-
-var D = new Class(function(){
-  this.ar = 'd'
-  this.superConstructor()
-}, C)
-
-D.def({
-  hi: function(arr){
-    this.super.hi(arr).push('dololo')
-    return arr
-  }
-})
-
-var d = new D
-console.log(d.hi(new Array))
