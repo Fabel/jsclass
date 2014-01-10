@@ -8,7 +8,7 @@
     var hello = function(){
       return 'hello'
     }
-
+    //public func
     this.hi = function(arr){
       return hello() + '!!!'+this.className
     }

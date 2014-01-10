@@ -11,21 +11,22 @@ var Animal = new Class(function(name){
   this.name = name
 })
 
-var Elephant = new Class(function(size){
-  this.size = size
-  this.superConstructor("Elephant")
-}, Animal)
-
 Animal.def({
   print: function(){ return this.name }
 })
+
+var Elephant = new Class(function(size){
+  this.size = size
+  this.$super("Elephant")
+}).extend(Animal)
+
 
 var elephant = new Elephant(100)
 
 console.log(elephant.print())   //-> 'Elephant'
 
 Elephant.def('print', function(){
-  return this.super.print.call(this) + " " +this.size + "kg"
+  return this.name+" "+this.size + "kg"
 })
 
 console.log(elephant.print())  //-> 'Elephant 100kg'
